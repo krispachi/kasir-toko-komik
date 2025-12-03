@@ -3,12 +3,18 @@
  */
 package com.krispachi.KasirTokoKomik;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.SwingUtilities;
 
+public class App {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        // Blok kode untuk mengatur Look and Feel
+        FlatLightLaf.setup();
+        
+        // Menampilkan GUI Login
+        SwingUtilities.invokeLater(() -> {
+            Login form = new Login();
+            form.setVisible(true);
+        });
     }
 }

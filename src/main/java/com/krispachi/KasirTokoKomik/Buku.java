@@ -29,6 +29,10 @@ public class Buku extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Halaman Buku");
+        setMinimumSize(new java.awt.Dimension(300, 230));
+        setPreferredSize(new java.awt.Dimension(640, 480));
+        setSize(new java.awt.Dimension(640, 480));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
