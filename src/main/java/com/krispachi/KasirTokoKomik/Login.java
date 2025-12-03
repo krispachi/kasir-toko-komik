@@ -4,7 +4,13 @@
  */
 package com.krispachi.KasirTokoKomik;
 
+import com.krispachi.KasirTokoKomik.singleton.KoneksiDatabase;
+import com.krispachi.KasirTokoKomik.singleton.Session;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -218,10 +224,10 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // Cek input kosong
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword()).trim();
+        String usernameInput = txtUsername.getText().trim();
+        String passwordInput = new String(txtPassword.getPassword()).trim();
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
             JOptionPane.showMessageDialog(
                 this,
                 "Username atau Password tidak boleh kosong!",
@@ -232,6 +238,51 @@ public class Login extends javax.swing.JFrame {
         }
         
         // Query SQL
+        try {
+            // Menapatkan koneksi database
+            Connection conn = KoneksiDatabase.getConnection();
+            String sql = "SELECT id, username, nama_lengkap, password_hash, role FROM pengguna WHERE username=?";
+
+            // Menjalankan query
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, usernameInput);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                // Mengecek password BCrypt
+                String hashedPassword = rs.getString("password_hash");
+                String inputPassword  = passwordInput;
+                String hash = hashedPassword.replace("$2y$", "$2a$");
+                
+                if(BCrypt.checkpw(inputPassword, hash)) {
+                    // Simpan informasi login ke Session
+                    Session.setUser(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("nama_lengkap"),
+                        rs.getString("role")
+                    );
+
+                    // Menampilkan pesan login berhasil
+                    JOptionPane.showMessageDialog(this, "Login berhasil!");
+
+                    // Buka menu utama
+                    new MenuUtama().setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Username atau Password salah!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Username atau Password salah!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal melakukan koneksi dengan database! " + e.getMessage(),
+                "Informasi",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }
         
     }//GEN-LAST:event_btnLoginActionPerformed
 

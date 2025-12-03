@@ -26,6 +26,15 @@ dependencies {
 
     // Memakai dependency FlatLaf untuk style GUI
     implementation 'com.formdev:flatlaf:3.6.2'
+
+    // Dependency untuk koneksi MySQL/MariaDB
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
+    
+    // Dependency untuk logging MariaDB
+    implementation 'org.slf4j:slf4j-simple:2.0.12'
+
+    // Dependency untuk memproses BCrypt
+    implementation 'org.mindrot:jbcrypt:0.4'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
