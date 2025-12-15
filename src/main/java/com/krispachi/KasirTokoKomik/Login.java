@@ -122,6 +122,7 @@ public class Login extends javax.swing.JFrame {
 
         btnLogin.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnLogin.setText("Login");
+        btnLogin.setToolTipText("Klik Untuk Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -149,6 +150,7 @@ public class Login extends javax.swing.JFrame {
         btnExit.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnExit.setForeground(new java.awt.Color(255, 255, 255));
         btnExit.setText("Quit");
+        btnExit.setToolTipText("Klik Untuk Keluar");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);

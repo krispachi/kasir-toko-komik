@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 03, 2025 at 10:51 AM
+-- Generation Time: Dec 15, 2025 at 11:52 AM
 -- Server version: 11.3.2-MariaDB
 -- PHP Version: 8.3.4
 
@@ -24,10 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `buku`
+-- Table structure for table `kategori`
 --
 
-CREATE TABLE `buku` (
+CREATE TABLE `kategori` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `keterangan` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `komik`
+--
+
+CREATE TABLE `komik` (
   `id` int(11) NOT NULL,
   `isbn` varchar(20) DEFAULT NULL,
   `judul` varchar(255) NOT NULL,
@@ -40,19 +53,6 @@ CREATE TABLE `buku` (
   `kategori_id` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kategori`
---
-
-CREATE TABLE `kategori` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(100) NOT NULL,
-  `keterangan` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -126,7 +126,7 @@ CREATE TABLE `penjualan` (
 CREATE TABLE `penjualan_detail` (
   `id` bigint(20) NOT NULL,
   `penjualan_id` bigint(20) NOT NULL,
-  `buku_id` int(11) NOT NULL,
+  `komik_id` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
   `harga` decimal(13,2) NOT NULL,
   `subtotal` decimal(15,2) NOT NULL,
@@ -138,19 +138,19 @@ CREATE TABLE `penjualan_detail` (
 --
 
 --
--- Indexes for table `buku`
---
-ALTER TABLE `buku`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_buku_kategori` (`kategori_id`),
-  ADD KEY `idx_buku_isbn` (`isbn`),
-  ADD KEY `idx_buku_judul` (`judul`(100));
-
---
 -- Indexes for table `kategori`
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `komik`
+--
+ALTER TABLE `komik`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_komik_kategori` (`kategori_id`) USING BTREE,
+  ADD KEY `idx_komik_isbn` (`isbn`) USING BTREE,
+  ADD KEY `idx_komik_judul` (`judul`(100)) USING BTREE;
 
 --
 -- Indexes for table `member`
@@ -183,22 +183,22 @@ ALTER TABLE `penjualan`
 ALTER TABLE `penjualan_detail`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_items_penjualan_id` (`penjualan_id`),
-  ADD KEY `idx_items_buku_id` (`buku_id`);
+  ADD KEY `idx_items_komik_id` (`komik_id`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `buku`
---
-ALTER TABLE `buku`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `komik`
+--
+ALTER TABLE `komik`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -230,10 +230,10 @@ ALTER TABLE `penjualan_detail`
 --
 
 --
--- Constraints for table `buku`
+-- Constraints for table `komik`
 --
-ALTER TABLE `buku`
-  ADD CONSTRAINT `fk_buku_kategori` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`);
+ALTER TABLE `komik`
+  ADD CONSTRAINT `fk_komik_kategori` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`);
 
 --
 -- Constraints for table `penjualan`
@@ -246,7 +246,7 @@ ALTER TABLE `penjualan`
 -- Constraints for table `penjualan_detail`
 --
 ALTER TABLE `penjualan_detail`
-  ADD CONSTRAINT `fk_items_buku` FOREIGN KEY (`buku_id`) REFERENCES `buku` (`id`),
+  ADD CONSTRAINT `fk_items_komik` FOREIGN KEY (`komik_id`) REFERENCES `komik` (`id`),
   ADD CONSTRAINT `fk_items_penjualan` FOREIGN KEY (`penjualan_id`) REFERENCES `penjualan` (`id`) ON DELETE CASCADE;
 COMMIT;
 
