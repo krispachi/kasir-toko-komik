@@ -266,7 +266,7 @@ public class Login extends javax.swing.JFrame {
                     );
 
                     // Menampilkan pesan login berhasil
-                    JOptionPane.showMessageDialog(this, "Login berhasil!");
+                    // JOptionPane.showMessageDialog(this, "Login berhasil!");
 
                     // Buka menu utama
                     new MenuUtama().setVisible(true);

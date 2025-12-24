@@ -44,8 +44,6 @@ public class MenuUtama extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Halaman Menu Utama");
         setMinimumSize(new java.awt.Dimension(640, 500));
-        setPreferredSize(new java.awt.Dimension(640, 500));
-        setResizable(false);
         setSize(new java.awt.Dimension(640, 500));
 
         Container.setMinimumSize(new java.awt.Dimension(640, 500));
