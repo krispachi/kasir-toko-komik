@@ -68,7 +68,7 @@ CREATE TABLE `member` (
   `telepon` varchar(30) DEFAULT NULL,
   `email` varchar(150) DEFAULT NULL,
   `alamat` text DEFAULT NULL,
-  `tanggal_daftar` date DEFAULT curdate(),
+  `tanggal_daftar` date DEFAULT (CURRENT_DATE),
   `point` int(11) DEFAULT 0,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NULL DEFAULT current_timestamp()
