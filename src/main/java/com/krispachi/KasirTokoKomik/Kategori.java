@@ -45,7 +45,7 @@ public class Kategori extends javax.swing.JFrame {
         jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Halaman Login");
+        setTitle("Halaman Kategori");
         setMinimumSize(new java.awt.Dimension(300, 230));
         setSize(new java.awt.Dimension(640, 480));
 

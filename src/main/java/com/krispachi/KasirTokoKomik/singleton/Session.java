@@ -15,6 +15,9 @@ public class Session {
     private String nama_lengkap;
     private String role;
     
+    // Private constructor agar tidak bisa di-instantiate
+    private Session() {}
+    
     public static Session getInstance() {
         if (instance == null) {
             instance = new Session();

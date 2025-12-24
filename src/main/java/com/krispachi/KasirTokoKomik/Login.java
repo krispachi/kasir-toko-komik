@@ -242,13 +242,11 @@ public class Login extends javax.swing.JFrame {
         }
         
         // Query SQL
-        try {
-            // Menapatkan koneksi database
-            Connection conn = KoneksiDatabase.getConnection();
-            String sql = "SELECT id, username, nama_lengkap, password_hash, role FROM pengguna WHERE username=?";
-
-            // Menjalankan query
-            PreparedStatement pst = conn.prepareStatement(sql);
+        String sql = "SELECT id, username, nama_lengkap, password_hash, role FROM pengguna WHERE username=?";
+        
+        // Menapatkan koneksi database
+        try (Connection conn = KoneksiDatabase.getConnection(); PreparedStatement pst = conn.prepareStatement(sql);) {
+            // Binding nilai dan menjalankan query
             pst.setString(1, usernameInput);
             ResultSet rs = pst.executeQuery();
 

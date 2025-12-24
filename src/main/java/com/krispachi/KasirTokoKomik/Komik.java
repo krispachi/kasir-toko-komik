@@ -38,6 +38,7 @@ public class Komik extends javax.swing.JFrame {
         txtHargaJual.putClientProperty("JTextField.placeholderText", "Masukkan Harga Jual");
         txtHargaBeli.putClientProperty("JTextField.placeholderText", "Masukkan Harga Beli");
         txtStok.putClientProperty("JTextField.placeholderText", "Masukkan Stok");
+        txtFilter.putClientProperty("JTextField.placeholderText", "Tampilkan Data Tertentu");
         
         // Inisialisasi kolom tabel
         String[] judulKolom = {"ISBN", "Judul", "Penulis", "Penerbit", "Tahun", "Harga Jual", "Harga Beli", "Stok", "Kategori"};
@@ -155,10 +156,13 @@ public class Komik extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Halaman Buku");
-        setEnabled(false);
-        setMinimumSize(new java.awt.Dimension(300, 230));
-        setSize(new java.awt.Dimension(640, 480));
+        setTitle("Halaman Komik");
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1000, 600));
+
+        Container.setMinimumSize(new java.awt.Dimension(1000, 600));
+        Container.setPreferredSize(new java.awt.Dimension(1000, 600));
 
         JudulText.setFont(new java.awt.Font("JetBrains Mono ExtraBold", 1, 14)); // NOI18N
         JudulText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -547,7 +551,7 @@ public class Komik extends javax.swing.JFrame {
                 .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(ContainerLayout.createSequentialGroup()
-                        .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFilter, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -589,7 +593,7 @@ public class Komik extends javax.swing.JFrame {
                 .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Ubah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Hapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
             .addGroup(ContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
