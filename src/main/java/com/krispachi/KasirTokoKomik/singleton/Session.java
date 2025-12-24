@@ -9,35 +9,43 @@ package com.krispachi.KasirTokoKomik.singleton;
  * @author Krisna
  */
 public class Session {
-    private static int userId;
-    private static String username;
-    private static String nama_lengkap;
-    private static String role;
+    private static Session instance;
+    private int userId;
+    private String username;
+    private String nama_lengkap;
+    private String role;
+    
+    public static Session getInstance() {
+        if (instance == null) {
+            instance = new Session();
+        }
+        return instance;
+    }
 
-    public static void setUser(int id, String user, String nama, String r){
+    public void setUser(int id, String user, String nama, String r){
         userId = id;
         username = user;
         nama_lengkap = nama;
         role = r;
     }
 
-    public static int getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
     
-    public static String getNamaLengkap() {
+    public String getNamaLengkap() {
         return nama_lengkap;
     }
 
-    public static String getRole() {
+    public String getRole() {
         return role;
     }
 
-    public static void clear(){
+    public void clear(){
         userId = 0;
         username = null;
         nama_lengkap = null;

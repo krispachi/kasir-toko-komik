@@ -4,6 +4,16 @@
  */
 package com.krispachi.KasirTokoKomik;
 
+import com.krispachi.KasirTokoKomik.model.KategoriModel;
+import com.krispachi.KasirTokoKomik.singleton.KoneksiDatabase;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Krisna
@@ -11,12 +21,83 @@ package com.krispachi.KasirTokoKomik;
 public class Komik extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Komik.class.getName());
+    DefaultTableModel model;
 
     /**
      * Creates new form Komik
      */
     public Komik() {
         initComponents();
+        
+        // Menambahkan placeholder ke inputfield
+        txtIsbn.putClientProperty("JTextField.placeholderText", "Masukkan ISBN");
+        txtJudul.putClientProperty("JTextField.placeholderText", "Masukkan Judul");
+        txtPenulis.putClientProperty("JTextField.placeholderText", "Masukkan Nama Penulis");
+        txtPenerbit.putClientProperty("JTextField.placeholderText", "Masukkan Nama Penerbit");
+        txtTahunTerbit.putClientProperty("JTextField.placeholderText", "Masukkan Tahun Terbit");
+        txtHargaJual.putClientProperty("JTextField.placeholderText", "Masukkan Harga Jual");
+        txtHargaBeli.putClientProperty("JTextField.placeholderText", "Masukkan Harga Beli");
+        txtStok.putClientProperty("JTextField.placeholderText", "Masukkan Stok");
+        
+        // Inisialisasi kolom tabel
+        String[] judulKolom = {"ISBN", "Judul", "Penulis", "Penerbit", "Tahun", "Harga Jual", "Harga Beli", "Stok", "Kategori"};
+        model = new DefaultTableModel(judulKolom, 0);
+        TabelKomik.setModel(model);
+        
+        // Panggil fungsi untuk menampilkan data yang sudah ada di DB
+        loadDataTabel();
+
+        // Load kategori ke combobox kategori
+        loadComboBoxKategori();
+    }
+    
+    private void loadDataTabel() {
+        // Menghapus data di model tabel agar tidak duplikat saat dipanggil ulang
+        model.setRowCount(0);
+
+        String sql = "SELECT isbn, judul, penulis, penerbit, tahun_terbit, harga_jual, harga_beli, stok, kategori_id FROM komik";
+
+        try (Connection conn = KoneksiDatabase.getConnection(); Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                // Ambil data sesuai nama kolom di database Anda
+                Object[] row = {
+                    rs.getString("isbn"),
+                    rs.getString("judul"),
+                    rs.getString("penulis"),
+                    rs.getString("penerbit"),
+                    rs.getInt("tahun_terbit"),
+                    rs.getDouble("harga_jual"),
+                    rs.getDouble("harga_beli"),
+                    rs.getInt("stok"),
+                    rs.getString("kategori_id")
+                };
+                
+                // Tambahkan ke tabel
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal memuat data tabel: " + e.getMessage());
+        }
+    }
+    
+    private void loadComboBoxKategori() {
+        // Mengosongkan isi combobox sebelum diisi
+        cbKategori.removeAllItems();
+        
+        String sql = "SELECT id, nama FROM kategori";
+
+        try (Connection conn = KoneksiDatabase.getConnection(); Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                // Masukkan objek Kategori ke combobox kategori
+                cbKategori.addItem(new KategoriModel(
+                    rs.getInt("id"), 
+                    rs.getString("nama")
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal memuat combobox: " + e.getMessage());
+        }
     }
 
     /**
@@ -57,7 +138,7 @@ public class Komik extends javax.swing.JFrame {
         txtStok = new javax.swing.JTextField();
         Kategori = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        comboKategori = new javax.swing.JComboBox<>();
+        cbKategori = new javax.swing.JComboBox<>();
         HargaBeli = new javax.swing.JPanel();
         txtHargaBeli = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -69,6 +150,9 @@ public class Komik extends javax.swing.JFrame {
         btnUbah = new javax.swing.JButton();
         Hapus = new javax.swing.JPanel();
         btnHapus = new javax.swing.JButton();
+        txtFilter = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Halaman Buku");
@@ -176,7 +260,7 @@ public class Komik extends javax.swing.JFrame {
         jLabel5.setText("Penulis");
 
         txtPenulis.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
-        txtPenulis.setToolTipText("Masukkan Penulis");
+        txtPenulis.setToolTipText("Masukkan Nama Penulis");
 
         javax.swing.GroupLayout PenulisLayout = new javax.swing.GroupLayout(Penulis);
         Penulis.setLayout(PenulisLayout);
@@ -197,7 +281,7 @@ public class Komik extends javax.swing.JFrame {
         );
 
         txtPenerbit.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
-        txtPenerbit.setToolTipText("Masukkan Penerbit");
+        txtPenerbit.setToolTipText("Masukkan Nama Penerbit");
 
         jLabel6.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         jLabel6.setText("Penerbit");
@@ -299,9 +383,9 @@ public class Komik extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         jLabel12.setText("Kategori");
 
-        comboKategori.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
-        comboKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboKategori.setToolTipText("Pilih Kategori");
+        cbKategori.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        cbKategori.setToolTipText("Pilih Kategori");
+        cbKategori.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout KategoriLayout = new javax.swing.GroupLayout(Kategori);
         Kategori.setLayout(KategoriLayout);
@@ -310,7 +394,7 @@ public class Komik extends javax.swing.JFrame {
             .addGroup(KategoriLayout.createSequentialGroup()
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(cbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         KategoriLayout.setVerticalGroup(
             KategoriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,7 +402,7 @@ public class Komik extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel12)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(comboKategori, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+            .addComponent(cbKategori, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
         );
 
         txtHargaBeli.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
@@ -355,6 +439,11 @@ public class Komik extends javax.swing.JFrame {
         btnTambah.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnTambah.setText("Tambah");
         btnTambah.setToolTipText("Klik Untuk Tambah Data");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout TambahLayout = new javax.swing.GroupLayout(Tambah);
         Tambah.setLayout(TambahLayout);
@@ -416,6 +505,15 @@ public class Komik extends javax.swing.JFrame {
             .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        txtFilter.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        txtFilter.setToolTipText("Masukkan ISBN");
+
+        jButton1.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        jButton1.setText("Reset");
+
+        jButton2.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        jButton2.setText("Filter");
+
         javax.swing.GroupLayout ContainerLayout = new javax.swing.GroupLayout(Container);
         Container.setLayout(ContainerLayout);
         ContainerLayout.setHorizontalGroup(
@@ -446,11 +544,18 @@ public class Komik extends javax.swing.JFrame {
                     .addComponent(ISBN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(HargaText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(40, 40, 40)
-                .addComponent(TableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
+                .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(ContainerLayout.createSequentialGroup()
+                        .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addContainerGap())))
         );
         ContainerLayout.setVerticalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TableScrollPane)
             .addGroup(ContainerLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(JudulText, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -485,11 +590,20 @@ public class Komik extends javax.swing.JFrame {
                     .addComponent(Ubah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Hapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
+            .addGroup(ContainerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TableScrollPane))
         );
 
         getContentPane().add(Container, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtHargaJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaJualActionPerformed
@@ -504,6 +618,63 @@ public class Komik extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIsbnActionPerformed
 
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // Ambil data dari Input
+        String isbn = txtIsbn.getText();
+        String judul = txtJudul.getText();
+        String penulis = txtPenulis.getText();
+        String penerbit = txtPenerbit.getText();
+        String tahunTerbit = txtTahunTerbit.getText();
+        String hargaJual = txtHargaJual.getText();
+        String hargaBeli = txtHargaBeli.getText();
+        String stok = txtStok.getText();
+        KategoriModel kategori = (KategoriModel) cbKategori.getSelectedItem();
+        
+        // Logika Insert ke Database
+        String sql = "INSERT INTO komik (isbn, judul, penulis, penerbit, tahun_terbit, harga_jual, harga_beli, stok, kategori_id) VALUES (?,?,?,?,?,?,?,?,?)";
+
+        // Cek try koneksi database dan prepare statement
+        try (Connection conn = KoneksiDatabase.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            // Bind nilai ke PreparedStatement
+            ps.setString(1, isbn);
+            ps.setString(2, judul);
+            ps.setString(3, penulis);
+            ps.setString(4, penerbit);
+            ps.setInt(5, Integer.parseInt(tahunTerbit));
+            ps.setDouble(6, Double.parseDouble(hargaJual));
+            ps.setDouble(7, Double.parseDouble(hargaBeli));
+            ps.setInt(8, Integer.parseInt(stok));
+            ps.setInt(9, kategori.getId());
+
+            // Eksekusi ke MariaDB
+            ps.executeUpdate();
+
+            // Update ke JTable
+            model.addRow(new Object[] {isbn, judul, penulis, penerbit, tahunTerbit, hargaJual, hargaBeli, stok, kategori});
+
+            // Bersihkan form
+            resetForm();
+            JOptionPane.showMessageDialog(this, "Data Berhasil Ditambah!");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error Database: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tahun, Harga, dan Stok harus angka!");
+        }
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    // Reset form
+    private void resetForm() {
+        txtIsbn.setText("");
+        txtJudul.setText("");
+        txtPenulis.setText("");
+        txtPenerbit.setText("");
+        txtTahunTerbit.setText("");
+        txtHargaJual.setText("");
+        txtHargaBeli.setText("");
+        txtStok.setText("");
+        cbKategori.setSelectedIndex(0);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -553,7 +724,9 @@ public class Komik extends javax.swing.JFrame {
     private javax.swing.JButton btnKosongkan;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnUbah;
-    private javax.swing.JComboBox<String> comboKategori;
+    private javax.swing.JComboBox<KategoriModel> cbKategori;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -563,6 +736,7 @@ public class Komik extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JTextField txtFilter;
     private javax.swing.JTextField txtHargaBeli;
     private javax.swing.JTextField txtHargaJual;
     private javax.swing.JTextField txtIsbn;

@@ -4,6 +4,9 @@
  */
 package com.krispachi.KasirTokoKomik;
 
+import com.krispachi.KasirTokoKomik.singleton.Session;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Krisna
@@ -28,24 +31,253 @@ public class MenuUtama extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Container = new javax.swing.JPanel();
+        btnPenjualan = new javax.swing.JButton();
+        JudulText = new javax.swing.JLabel();
+        btnMember = new javax.swing.JButton();
+        btnKomik = new javax.swing.JButton();
+        btnKategori = new javax.swing.JButton();
+        btnPengguna = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Halaman Menu Utama");
-        setMinimumSize(new java.awt.Dimension(300, 230));
-        setSize(new java.awt.Dimension(640, 480));
+        setMinimumSize(new java.awt.Dimension(640, 500));
+        setPreferredSize(new java.awt.Dimension(640, 500));
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 500));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        Container.setMinimumSize(new java.awt.Dimension(640, 500));
+        Container.setPreferredSize(new java.awt.Dimension(640, 500));
+
+        btnPenjualan.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnPenjualan.setText("Manajen Penjualan");
+        btnPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPenjualanActionPerformed(evt);
+            }
+        });
+
+        JudulText.setFont(new java.awt.Font("JetBrains Mono ExtraBold", 1, 14)); // NOI18N
+        JudulText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JudulText.setText("Menu Utama");
+
+        btnMember.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnMember.setText("Manajemen Member");
+        btnMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMemberActionPerformed(evt);
+            }
+        });
+
+        btnKomik.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnKomik.setText("Manajemen Komik");
+        btnKomik.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKomikActionPerformed(evt);
+            }
+        });
+
+        btnKategori.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnKategori.setText("Manajemen Kategori");
+        btnKategori.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKategoriActionPerformed(evt);
+            }
+        });
+
+        btnPengguna.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnPengguna.setText("Manajemen Pengguna");
+        btnPengguna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPenggunaActionPerformed(evt);
+            }
+        });
+
+        btnExit.setBackground(new java.awt.Color(255, 51, 102));
+        btnExit.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnExit.setForeground(new java.awt.Color(255, 255, 255));
+        btnExit.setText("Quit");
+        btnExit.setToolTipText("Klik Untuk Keluar");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setBackground(new java.awt.Color(255, 51, 102));
+        btnLogout.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Logout");
+        btnLogout.setToolTipText("Klik Untuk Keluar");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ContainerLayout = new javax.swing.GroupLayout(Container);
+        Container.setLayout(ContainerLayout);
+        ContainerLayout.setHorizontalGroup(
+            ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContainerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JudulText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPenjualan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMember, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                    .addComponent(btnKomik, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                    .addComponent(btnKategori, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                    .addComponent(btnPengguna, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        ContainerLayout.setVerticalGroup(
+            ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContainerLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(JudulText, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnMember, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnKomik, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnKategori, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        getContentPane().add(Container, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // Menananyakan konfirmasi User apakah mau Quit
+        int result = JOptionPane.showConfirmDialog(
+            this,
+            "Yakin ingin keluar?",
+            "Konfirmasi",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        // Jika ya, maka quit
+        if(result == JOptionPane.YES_OPTION){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnPenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPenjualanActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null
+            && (Session.getInstance().getRole().equalsIgnoreCase("kasir")
+            || Session.getInstance().getRole().equalsIgnoreCase("admin"))) {
+            
+            Penjualan frame = new Penjualan();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnPenjualanActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null) {
+            // Menananyakan konfirmasi User apakah mau Logout
+            int result = JOptionPane.showConfirmDialog(
+                this,
+                "Yakin ingin Logout?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            // Jika ya, maka quit
+            if(result == JOptionPane.YES_OPTION){
+                Login frame = new Login();
+                frame.setVisible(true);
+                Session.getInstance().clear();
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemberActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null
+            && (Session.getInstance().getRole().equalsIgnoreCase("kasir")
+            || Session.getInstance().getRole().equalsIgnoreCase("admin"))) {
+            
+            Member frame = new Member();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnMemberActionPerformed
+
+    private void btnKomikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKomikActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null
+            && (Session.getInstance().getRole().equalsIgnoreCase("kasir")
+            || Session.getInstance().getRole().equalsIgnoreCase("admin"))) {
+            
+            Komik frame = new Komik();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnKomikActionPerformed
+
+    private void btnKategoriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKategoriActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null
+            && (Session.getInstance().getRole().equalsIgnoreCase("kasir")
+            || Session.getInstance().getRole().equalsIgnoreCase("admin"))) {
+            
+            Kategori frame = new Kategori();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnKategoriActionPerformed
+
+    private void btnPenggunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPenggunaActionPerformed
+        // Cek session dan role
+        if(Session.getInstance() != null 
+            && Session.getInstance().getRole().equalsIgnoreCase("admin")) {
+            
+            Pengguna frame = new Pengguna();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnPenggunaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -73,5 +305,14 @@ public class MenuUtama extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Container;
+    private javax.swing.JLabel JudulText;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnKategori;
+    private javax.swing.JButton btnKomik;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnMember;
+    private javax.swing.JButton btnPengguna;
+    private javax.swing.JButton btnPenjualan;
     // End of variables declaration//GEN-END:variables
 }

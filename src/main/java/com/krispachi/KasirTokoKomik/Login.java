@@ -26,6 +26,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         
+        // Menambahkan placeholder ke inputfield
         txtUsername.putClientProperty("JTextField.placeholderText", "Masukkan Username");
         txtPassword.putClientProperty("JTextField.placeholderText", "Masukkan Password");
     }
@@ -206,6 +207,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -258,7 +260,7 @@ public class Login extends javax.swing.JFrame {
                 
                 if(BCrypt.checkpw(inputPassword, hash)) {
                     // Simpan informasi login ke Session
-                    Session.setUser(
+                    Session.getInstance().setUser(
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("nama_lengkap"),
