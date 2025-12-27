@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 15, 2025 at 11:52 AM
+-- Generation Time: Dec 27, 2025 at 09:05 AM
 -- Server version: 11.3.2-MariaDB
 -- PHP Version: 8.3.4
 
@@ -34,6 +34,13 @@ CREATE TABLE `kategori` (
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`id`, `nama`, `keterangan`, `created_at`) VALUES
+(1, 'Fantasi', 'Cerita yang berlatarkan pedang dan sihir.', '2025-12-24 02:33:45');
+
 -- --------------------------------------------------------
 
 --
@@ -42,7 +49,7 @@ CREATE TABLE `kategori` (
 
 CREATE TABLE `komik` (
   `id` int(11) NOT NULL,
-  `isbn` varchar(20) DEFAULT NULL,
+  `isbn` varchar(20) NOT NULL,
   `judul` varchar(255) NOT NULL,
   `penulis` varchar(200) DEFAULT NULL,
   `penerbit` varchar(200) DEFAULT NULL,
@@ -54,6 +61,14 @@ CREATE TABLE `komik` (
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `komik`
+--
+
+INSERT INTO `komik` (`id`, `isbn`, `judul`, `penulis`, `penerbit`, `tahun_terbit`, `harga_jual`, `harga_beli`, `stok`, `kategori_id`, `created_at`, `updated_at`) VALUES
+(1, '012-345', 'Magi', 'Ohtaka', 'Shogakukan', '2009', 160000.00, 100000.00, 64, 1, '2025-12-24 04:45:06', NULL),
+(2, '001', 'Bananana', 'Inaba', 'Banara', '2025', 2000.00, 1000.00, 1000, 1, '2025-12-27 08:47:21', '2025-12-27 08:53:14');
 
 -- --------------------------------------------------------
 
@@ -148,8 +163,8 @@ ALTER TABLE `kategori`
 --
 ALTER TABLE `komik`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `idx_komik_isbn` (`isbn`) USING BTREE,
   ADD KEY `fk_komik_kategori` (`kategori_id`) USING BTREE,
-  ADD KEY `idx_komik_isbn` (`isbn`) USING BTREE,
   ADD KEY `idx_komik_judul` (`judul`(100)) USING BTREE;
 
 --
@@ -193,13 +208,13 @@ ALTER TABLE `penjualan_detail`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `komik`
 --
 ALTER TABLE `komik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `member`
