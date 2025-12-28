@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 27, 2025 at 09:05 AM
+-- Generation Time: Dec 28, 2025 at 06:20 AM
 -- Server version: 11.3.2-MariaDB
 -- PHP Version: 8.3.4
 
@@ -39,7 +39,8 @@ CREATE TABLE `kategori` (
 --
 
 INSERT INTO `kategori` (`id`, `nama`, `keterangan`, `created_at`) VALUES
-(1, 'Fantasi', 'Cerita yang berlatarkan pedang dan sihir.', '2025-12-24 02:33:45');
+(1, 'Fantasi', 'Cerita yang berlatarkan pedang dan sihir.', '2025-12-24 02:33:45'),
+(2, 'Adventure', 'Petualangan untuk menyaksikan keadaan dunia, seluruh dunia.\nSerta memahaminya.', '2025-12-28 05:33:49');
 
 -- --------------------------------------------------------
 
@@ -156,7 +157,8 @@ CREATE TABLE `penjualan_detail` (
 -- Indexes for table `kategori`
 --
 ALTER TABLE `kategori`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nama` (`nama`);
 
 --
 -- Indexes for table `komik`
@@ -208,7 +210,7 @@ ALTER TABLE `penjualan_detail`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `komik`
