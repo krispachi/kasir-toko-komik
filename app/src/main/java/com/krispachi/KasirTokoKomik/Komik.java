@@ -13,7 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -53,6 +55,10 @@ public class Komik extends javax.swing.JFrame {
         tabelKomik.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelKomik.setModel(model);
         
+        // Inisialisasi fitur filter
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tabelKomik.setRowSorter(sorter);
+        
         // Panggil fungsi untuk menampilkan data yang sudah ada di DB
         loadDataTabel();
 
@@ -64,7 +70,7 @@ public class Komik extends javax.swing.JFrame {
         // Menghapus data di model tabel agar tidak duplikat saat dipanggil ulang
         model.setRowCount(0);
 
-        String sql = "SELECT isbn, judul, penulis, penerbit, tahun_terbit, harga_jual, harga_beli, stok, kategori_id FROM komik";
+        String sql = "SELECT komik.isbn, komik.judul, komik.penulis, komik.penerbit, komik.tahun_terbit, komik.harga_jual, komik.harga_beli, komik.stok, kategori.nama AS nama_kategori FROM komik JOIN kategori ON komik.kategori_id = kategori.id";
 
         try (Connection conn = KoneksiDatabase.getConnection(); Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
 
@@ -79,7 +85,7 @@ public class Komik extends javax.swing.JFrame {
                     rs.getDouble("harga_jual"),
                     rs.getDouble("harga_beli"),
                     rs.getInt("stok"),
-                    rs.getString("kategori_id")
+                    rs.getString("nama_kategori")
                 };
                 
                 // Tambahkan ke tabel
@@ -172,17 +178,16 @@ public class Komik extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Halaman Komik");
-        setMinimumSize(new java.awt.Dimension(1000, 700));
-        setPreferredSize(new java.awt.Dimension(1000, 700));
-        setSize(new java.awt.Dimension(1000, 700));
+        setMinimumSize(new java.awt.Dimension(1000, 750));
+        setSize(new java.awt.Dimension(1000, 750));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
 
-        Container.setMinimumSize(new java.awt.Dimension(1000, 700));
-        Container.setPreferredSize(new java.awt.Dimension(1000, 700));
+        Container.setMinimumSize(new java.awt.Dimension(1000, 750));
+        Container.setPreferredSize(new java.awt.Dimension(1000, 750));
 
         JudulText.setFont(new java.awt.Font("JetBrains Mono ExtraBold", 1, 14)); // NOI18N
         JudulText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -484,6 +489,11 @@ public class Komik extends javax.swing.JFrame {
         btnKosongkan.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnKosongkan.setText("Kosongkan Input");
         btnKosongkan.setToolTipText("Klik Untuk Mengosongkan Input");
+        btnKosongkan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKosongkanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout KosongkanInputLayout = new javax.swing.GroupLayout(KosongkanInput);
         KosongkanInput.setLayout(KosongkanInputLayout);
@@ -500,6 +510,11 @@ public class Komik extends javax.swing.JFrame {
         btnUbah.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnUbah.setText("Ubah");
         btnUbah.setToolTipText("Klik Untuk Ubah Data");
+        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUbahActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout UbahLayout = new javax.swing.GroupLayout(Ubah);
         Ubah.setLayout(UbahLayout);
@@ -517,6 +532,11 @@ public class Komik extends javax.swing.JFrame {
         btnHapus.setForeground(new java.awt.Color(255, 255, 255));
         btnHapus.setText("Hapus");
         btnHapus.setToolTipText("Klik Untuk Hapus Data");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout HapusLayout = new javax.swing.GroupLayout(Hapus);
         Hapus.setLayout(HapusLayout);
@@ -534,9 +554,19 @@ public class Komik extends javax.swing.JFrame {
 
         btnReset.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         btnFilter.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnFilter.setText("Filter");
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout FilterLayout = new javax.swing.GroupLayout(Filter);
         Filter.setLayout(FilterLayout);
@@ -606,6 +636,7 @@ public class Komik extends javax.swing.JFrame {
                 .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        btnLihatDetailData.setBackground(new java.awt.Color(153, 204, 255));
         btnLihatDetailData.setFont(new java.awt.Font("JetBrains Mono SemiBold", 0, 12)); // NOI18N
         btnLihatDetailData.setText("Lihat Detail Data");
         btnLihatDetailData.setToolTipText("Klik Untuk Hapus Data");
@@ -705,9 +736,9 @@ public class Komik extends javax.swing.JFrame {
                 .addComponent(TerapkanTabelData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(DetailData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                 .addComponent(Kembali, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(30, 30, 30))
             .addGroup(ContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Filter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -744,6 +775,33 @@ public class Komik extends javax.swing.JFrame {
         String hargaBeli = txtHargaBeli.getText();
         String stok = txtStok.getText();
         KategoriModel kategori = (KategoriModel) cbKategori.getSelectedItem();
+        
+        // PROSES VALIDASI
+        // Validasi Field Kosong
+        if (isbn.isEmpty() || judul.isEmpty() || penulis.isEmpty() || 
+            penerbit.isEmpty() || tahunTerbit.isEmpty() || 
+            hargaJual.isEmpty() || hargaBeli.isEmpty() || stok.isEmpty()) {
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return; // Program berhenti di sini
+        }
+
+        // Validasi ComboBox (Pastikan sudah pilih kategori)
+        if (kategori == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silahkan pilih kategori terlebih dahulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validasi Format Angka (Tahun, Harga, Stok)
+        try {
+            Integer.parseInt(tahunTerbit);
+            Double.parseDouble(hargaJual);
+            Double.parseDouble(hargaBeli);
+            Integer.parseInt(stok);
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tahun, Harga, dan Stok harus berupa angka!", "Error Format", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         // Logika Insert ke Database
         String sql = "INSERT INTO komik (isbn, judul, penulis, penerbit, tahun_terbit, harga_jual, harga_beli, stok, kategori_id) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -840,8 +898,180 @@ public class Komik extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTerapkanTabelDataActionPerformed
 
     private void btnLihatDetailDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLihatDetailDataActionPerformed
-        // TODO add your handling code here:
+        // Cek apakah ada baris yang dipilih
+        int baris = tabelKomik.getSelectedRow();
+        
+        if (baris != -1) {
+            // Ambil data dari kolom (indeks kolom mulai dari 0)
+            String isbn = tabelKomik.getValueAt(baris, 0).toString();
+            String judul = tabelKomik.getValueAt(baris, 1).toString();
+            String penulis = tabelKomik.getValueAt(baris, 2).toString();
+            String penerbit = tabelKomik.getValueAt(baris, 3).toString();
+            String tahunTerbit = tabelKomik.getValueAt(baris, 4).toString();
+            String hargaJual = tabelKomik.getValueAt(baris, 5).toString();
+            String hargaBeli = tabelKomik.getValueAt(baris, 6).toString();
+            String stok = tabelKomik.getValueAt(baris, 7).toString();
+            String kategori = tabelKomik.getValueAt(baris, 8).toString();
+
+            // Susun pesan detail
+            String pesan = "Detail Data Komik:\n"
+                         + "----------------------\n"
+                         + "ISBN : " + isbn + "\n"
+                         + "Judul : " + judul + "\n"
+                         + "Penulis : " + penulis + "\n"
+                         + "Penerbit : " + penerbit + "\n"
+                         + "Tahun Terbit : " + tahunTerbit + "\n"
+                         + "Harga Jual : " + hargaJual + "\n"
+                         + "Harga Beli : " + hargaBeli + "\n"
+                         + "Stok : " + stok + "\n"
+                         + "Kategori : " + kategori;
+
+            // Tampilkan dalam Panel (JOptionPane)
+            javax.swing.JOptionPane.showMessageDialog(this, pesan, "Detail Data", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Jika tidak ada baris yang dipilih
+            javax.swing.JOptionPane.showMessageDialog(this, "Silahkan pilih baris di tabel terlebih dahulu!");
+        }
     }//GEN-LAST:event_btnLihatDetailDataActionPerformed
+
+    private void btnKosongkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKosongkanActionPerformed
+        resetForm();
+    }//GEN-LAST:event_btnKosongkanActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // Ambil baris yang dipilih
+        int baris = tabelKomik.getSelectedRow();
+
+        if (baris != -1) {
+            // Ambil ISBN dari kolom 0
+            String isbn = tabelKomik.getValueAt(baris, 0).toString();
+            String judul = tabelKomik.getValueAt(baris, 1).toString(); // Judul untuk konfirmasi
+
+            // Tampilkan konfirmasi
+            int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
+                    "Apakah Anda yakin ingin menghapus komik: " + judul + "?", 
+                    "Konfirmasi Hapus", 
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+
+            if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+                try (Connection conn = KoneksiDatabase.getConnection()) {
+                    String sql = "DELETE FROM komik WHERE isbn = ?";
+                    java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, isbn);
+
+                    int hasil = ps.executeUpdate();
+                    if (hasil > 0) {
+                        javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+                        loadDataTabel(); // Refresh tabel
+                    }
+                } catch (java.sql.SQLException e) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+                }
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus terlebih dahulu!");
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // Ambil data dari Input
+        String isbn = txtIsbn.getText();
+        String judul = txtJudul.getText();
+        String penulis = txtPenulis.getText();
+        String penerbit = txtPenerbit.getText();
+        String tahunTerbit = txtTahunTerbit.getText();
+        String hargaJual = txtHargaJual.getText();
+        String hargaBeli = txtHargaBeli.getText();
+        String stok = txtStok.getText();
+        KategoriModel kategori = (KategoriModel) cbKategori.getSelectedItem();
+        
+        // PROSES VALIDASI
+        // Validasi Field Kosong
+        if (isbn.isEmpty() || judul.isEmpty() || penulis.isEmpty() || 
+            penerbit.isEmpty() || tahunTerbit.isEmpty() || 
+            hargaJual.isEmpty() || hargaBeli.isEmpty() || stok.isEmpty()) {
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return; // Program berhenti di sini
+        }
+
+        // Validasi ComboBox (Pastikan sudah pilih kategori)
+        if (kategori == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silahkan pilih kategori terlebih dahulu!", "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validasi Format Angka (Tahun, Harga, Stok)
+        try {
+            Integer.parseInt(tahunTerbit);
+            Double.parseDouble(hargaJual);
+            Double.parseDouble(hargaBeli);
+            Integer.parseInt(stok);
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tahun, Harga, dan Stok harus berupa angka!", "Error Format", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Tampilkan konfirmasi
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
+                "Apakah Anda yakin ingin mengubah komik: " + judul + "?", 
+                "Konfirmasi Ubah", 
+                javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == javax.swing.JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        // Proses Update ke Database
+        String sql = "UPDATE komik SET judul=?, penulis=?, penerbit=?, tahun_terbit=?, "
+                   + "harga_jual=?, harga_beli=?, stok=?, kategori_id=? WHERE isbn=?";
+
+        try (Connection conn = KoneksiDatabase.getConnection(); 
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, judul);
+            ps.setString(2, penulis);
+            ps.setString(3, penerbit);
+            ps.setInt(4, Integer.parseInt(txtTahunTerbit.getText()));
+            ps.setDouble(5, Double.parseDouble(txtHargaJual.getText()));
+            ps.setDouble(6, Double.parseDouble(txtHargaBeli.getText()));
+            ps.setInt(7, Integer.parseInt(txtStok.getText()));
+            ps.setInt(8, kategori.getId());
+            ps.setString(9, isbn);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Data Berhasil Diperbarui!");
+                loadDataTabel(); // Refresh tabel
+                resetForm();
+            }
+        } catch (SQLException | NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal Update: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
+        String text = txtFilter.getText();
+
+        // Mendapatkan sorter dari tabel
+        TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tabelKomik.getRowSorter();
+
+        if (text.trim().length() == 0) {
+            // Jika kolom filter kosong, tampilkan semua data
+            sorter.setRowFilter(null);
+        } else {
+            // Filter berdasarkan teks (case-insensitive)
+            // (?i) membuat pencarian tidak peduli huruf besar atau kecil
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+        }
+    }//GEN-LAST:event_btnFilterActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        txtFilter.setText("");
+        // Mendapatkan sorter dari tabel
+        TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tabelKomik.getRowSorter();
+        sorter.setRowFilter(null);
+    }//GEN-LAST:event_btnResetActionPerformed
 
     // Reset form
     private void resetForm() {

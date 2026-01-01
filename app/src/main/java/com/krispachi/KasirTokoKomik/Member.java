@@ -62,11 +62,11 @@ public class Member extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Halaman Member");
-        setMinimumSize(new java.awt.Dimension(300, 230));
-        setPreferredSize(new java.awt.Dimension(640, 480));
-        setSize(new java.awt.Dimension(640, 480));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1000, 600));
 
-        jLabel1.setText("Mamber");
+        jLabel1.setText("Member");
 
         jLabel2.setText("Kode Member");
 
@@ -183,12 +183,12 @@ public class Member extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtKode))
+                                .addComponent(txtKode, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tambahMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(ubahMember, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                                .addGap(30, 30, 30)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(nonAktifMember)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -197,16 +197,16 @@ public class Member extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(175, 175, 175)
                         .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(filterMember)
                         .addGap(18, 18, 18)
                         .addComponent(resetMember))
                     .addComponent(jScrollPane1))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +253,7 @@ public class Member extends javax.swing.JFrame {
                             .addComponent(ubahMember)
                             .addComponent(hapusMember)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         pack();
