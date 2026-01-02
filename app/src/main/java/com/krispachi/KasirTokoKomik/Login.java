@@ -61,7 +61,6 @@ public class Login extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(300, 230));
         setPreferredSize(new java.awt.Dimension(640, 480));
         setSize(new java.awt.Dimension(640, 480));
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(16, 16, 16, 16));
 

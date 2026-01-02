@@ -710,7 +710,27 @@ public class Penjualan extends javax.swing.JFrame {
                         totalHarga += (double) modelKeranjang.getValueAt(i, 4);
                         totalJumlah += (int) modelKeranjang.getValueAt(i, 3);
                 }
+                
+                //Diskon 10% jika > 200.000
+                double diskon = 0;
+                if (totalHarga > 200000) {
+                    diskon = totalHarga * 0.10;
+                }
+                double grandTotal = totalHarga - diskon;
+                
+                // Formatter Rupiah
+                NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
+                // 4. Input Uang Pembayaran (Menggantikan Confirm Dialog biasa)
+                String message = "Total Belanja: " + nf.format(totalHarga) +
+                                 "\nDiskon (10%): " + nf.format(diskon) +
+                                 "\n------------------------------" +
+                                 "\nTOTAL BAYAR: " + nf.format(grandTotal) +
+                                 "\n\nMasukkan Uang Pembayaran:";
+
+                String inputUang = JOptionPane.showInputDialog(this, message, "Proses Pembayaran", JOptionPane.PLAIN_MESSAGE);
+                
+                /*
                 int confirm = JOptionPane.showConfirmDialog(this,
                                 "Total belanja: " + NumberFormat.getCurrencyInstance(new Locale("id", "ID"))
                                                 .format(totalHarga) + "\nProses pembayaran?",
@@ -718,6 +738,29 @@ public class Penjualan extends javax.swing.JFrame {
 
                 if (confirm != JOptionPane.YES_OPTION)
                         return;
+                */
+                // Jika user menekan Cancel atau input kosong
+                if (inputUang == null || inputUang.trim().isEmpty()) {
+                    return;
+                }
+
+                double jumlah_bayar = 0;
+                double kembalian = 0;
+
+                try {
+                    // Membersihkan input dari karakter non-angka (jika user mengetik rp/titik)
+                    jumlah_bayar = Double.parseDouble(inputUang.replaceAll("[^0-9]", ""));
+
+                    if (jumlah_bayar < grandTotal) {
+                        JOptionPane.showMessageDialog(this, "Uang pembayaran kurang!", "Gagal", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    kembalian = jumlah_bayar - grandTotal;
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Input uang tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 Connection conn = null;
                 try {
@@ -734,7 +777,7 @@ public class Penjualan extends javax.swing.JFrame {
                         psPenjualan.setInt(2, Session.getInstance().getUserId());
                         psPenjualan.setInt(3, totalJumlah);
                         psPenjualan.setDouble(4, totalHarga);
-                        psPenjualan.setDouble(5, totalHarga);
+                        psPenjualan.setDouble(5, jumlah_bayar);
                         psPenjualan.executeUpdate();
 
                         ResultSet generatedKeys = psPenjualan.getGeneratedKeys();
@@ -773,8 +816,12 @@ public class Penjualan extends javax.swing.JFrame {
 
                         conn.commit();
 
-                        JOptionPane.showMessageDialog(this, "Transaksi berhasil!\nInvoice: " + invoiceNumber, "Sukses",
-                                        JOptionPane.INFORMATION_MESSAGE);
+                        //JOptionPane.showMessageDialog(this, "Transaksi berhasil!\nInvoice: " + invoiceNumber, "Sukses",
+                        //                JOptionPane.INFORMATION_MESSAGE);
+                        
+                        // 6. Tampilkan Struk Virtual ke Layar
+                        tampilkanStrukDiLayar(invoiceNumber, totalHarga, diskon, grandTotal, jumlah_bayar, kembalian);
+                        
                         resetKeranjang();
                         loadHistoriPenjualan();
 
@@ -796,6 +843,63 @@ public class Penjualan extends javax.swing.JFrame {
                                         /* ignore */ }
                         }
                 }
+        }
+        
+        private void tampilkanStrukDiLayar(String noInvoice, double subTotal, double diskon, double grandTotal, double bayar, double kembali) {
+            // StringBuilder untuk menyusun teks struk
+            StringBuilder sb = new StringBuilder();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+
+            // --- HEADER ---
+            sb.append("==========================================\n");
+            sb.append("           TOKO KOMIK JAVA            \n");
+            sb.append("       Jl. Koding No. 1, Bali      \n");
+            sb.append("==========================================\n");
+            sb.append("No Invoice : ").append(noInvoice).append("\n");
+            sb.append("Tanggal    : ").append(sdf.format(new java.util.Date())).append("\n");
+            sb.append("Kasir      : ").append(Session.getInstance().getUserId()).append("\n");
+            sb.append("------------------------------------------\n");
+
+            // --- ITEM BELANJA ---
+            // Format: Nama Barang (qty x harga) -> Subtotal
+            for (int i = 0; i < modelKeranjang.getRowCount(); i++) {
+                String nama = (String) modelKeranjang.getValueAt(i, 1);
+                int qty = (int) modelKeranjang.getValueAt(i, 3);
+                double harga = (double) modelKeranjang.getValueAt(i, 2);
+                double totalItem = (double) modelKeranjang.getValueAt(i, 4);
+
+                sb.append(nama).append("\n");
+                String rincian = String.format("   %d x %-10s %18s", qty, nf.format(harga), nf.format(totalItem));
+                sb.append(rincian).append("\n");
+            }
+
+            // --- FOOTER (TOTAL & PEMBAYARAN) ---
+            sb.append("------------------------------------------\n");
+            sb.append(String.format("Total Belanja  : %24s\n", nf.format(subTotal)));
+
+            if (diskon > 0) {
+                sb.append(String.format("Diskon (10%%)   : %24s\n", "-" + nf.format(diskon)));
+            }
+
+            sb.append(String.format("TOTAL HARGA    : %24s\n", nf.format(grandTotal)));
+            sb.append("------------------------------------------\n");
+            sb.append(String.format("Tunai          : %24s\n", nf.format(bayar)));
+            sb.append(String.format("Kembali        : %24s\n", nf.format(kembali)));
+            sb.append("==========================================\n");
+            sb.append("    TERIMA KASIH ATAS KUNJUNGAN ANDA      \n");
+            sb.append("==========================================\n");
+
+            // Menampilkan ke JTextArea
+            javax.swing.JTextArea textArea = new javax.swing.JTextArea(sb.toString());
+            textArea.setEditable(false);
+            textArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.BOLD, 12)); 
+            textArea.setColumns(40);
+            textArea.setRows(20);
+
+            javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
+
+            JOptionPane.showMessageDialog(this, scrollPane, "Cetak Struk", JOptionPane.PLAIN_MESSAGE);
         }
 
         private void btnLihatDetailActionPerformed() {
