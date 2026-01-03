@@ -5,9 +5,12 @@
 package com.krispachi.KasirTokoKomik;
 
 import com.krispachi.KasirTokoKomik.singleton.KoneksiDatabase;
+import com.krispachi.KasirTokoKomik.singleton.Session;
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,12 +21,49 @@ import javax.swing.table.DefaultTableModel;
 public class Member extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Member.class.getName());
+    DefaultTableModel model;
 
     /**
      * Creates new form Member
      */
     public Member() {
         initComponents();
+        
+        String[] judulKolom = {
+            "ID", "Kode Member", "Nama", "Telepon", "Email", "Alamat", "Tgl Daftar", "Poin", "Status"
+        };
+        model = new DefaultTableModel(null, judulKolom);
+        tableMember.setModel(model);
+        // Panggil fungsi untuk menampilkan data yang sudah ada di DB
+        loadDataTabel();
+    }
+    
+    private void loadDataTabel() {
+        model.setRowCount(0);
+
+        String sql = "SELECT id, kode_member, nama, telepon, email, alamat, tanggal_daftar, point, is_active FROM member";
+
+        try (Connection conn = KoneksiDatabase.getConnection(); Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("id"),
+                    rs.getString("kode_member"),
+                    rs.getString("nama"),
+                    rs.getString("telepon"),
+                    rs.getString("email"),
+                    rs.getString("alamat"),
+                    rs.getDate("tanggal_daftar"),
+                    rs.getInt("point"),
+                    rs.getInt("is_active") == 1 ? "Aktif" : "Tidak Aktif"
+                };
+                
+                // Tambahkan ke tabel
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal memuat data tabel: " + e.getMessage());
+        }
     }
 
     /**
@@ -59,6 +99,7 @@ public class Member extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         aktifMember = new javax.swing.JRadioButton();
         nonAktifMember = new javax.swing.JRadioButton();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Halaman Member");
@@ -188,6 +229,15 @@ public class Member extends javax.swing.JFrame {
         nonAktifMember.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
         nonAktifMember.setText("Tidak Aktif");
 
+        backBtn.setBackground(new java.awt.Color(255, 51, 102));
+        backBtn.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
+        backBtn.setText("Kembali");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -227,7 +277,8 @@ public class Member extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(clearMember, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                                 .addComponent(hapusMember, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(backBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -249,7 +300,7 @@ public class Member extends javax.swing.JFrame {
                     .addComponent(filterMember, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(resetMember, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -282,7 +333,9 @@ public class Member extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ubahMember, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(hapusMember, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(hapusMember, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
@@ -461,6 +514,22 @@ public class Member extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAlamatActionPerformed
 
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        if(Session.getInstance() != null
+            && (Session.getInstance().getRole().equalsIgnoreCase("kasir")
+            || Session.getInstance().getRole().equalsIgnoreCase("admin"))) {
+            
+            MenuUtama frame = new MenuUtama();
+            frame.setVisible(true);
+            this.dispose();
+        } else {
+            Login frame = new Login();
+            frame.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_backBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -488,6 +557,7 @@ public class Member extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton aktifMember;
+    private javax.swing.JButton backBtn;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton clearMember;
     private javax.swing.JButton filterMember;
