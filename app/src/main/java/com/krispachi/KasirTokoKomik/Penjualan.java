@@ -4,8 +4,17 @@
  */
 package com.krispachi.KasirTokoKomik;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.krispachi.KasirTokoKomik.singleton.KoneksiDatabase;
 import com.krispachi.KasirTokoKomik.singleton.Session;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -900,6 +909,51 @@ public class Penjualan extends javax.swing.JFrame {
             javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
 
             JOptionPane.showMessageDialog(this, scrollPane, "Cetak Struk", JOptionPane.PLAIN_MESSAGE);
+            
+            //Konfirmasi Cetak PDF
+            int jawab = JOptionPane.showConfirmDialog(this, 
+                    "Cetak struk ke PDF?", 
+                    "Cetak PDF", 
+                    JOptionPane.YES_NO_OPTION);
+
+            if (jawab == JOptionPane.YES_OPTION) {
+                // Panggil method pembuatan PDF
+                cetakStrukPDF(noInvoice, sb.toString());
+            }
+        }
+        
+        private void cetakStrukPDF(String noInvoice, String isiStruk) {
+            try {
+                //Nama File & Ukuran Kertas
+                String namaFile = "Struk_" + noInvoice + ".pdf";
+
+                Rectangle pageSize = new Rectangle(PageSize.A6); 
+                Document document = new Document(pageSize, 10, 10, 10, 10);
+
+                PdfWriter.getInstance(document, new FileOutputStream(namaFile));
+
+                document.open();
+
+                //Set Font Monospace
+                Font fontStruk = new Font(Font.FontFamily.COURIER, 10, Font.NORMAL);
+
+                //Masukkan isi String ke dalam PDF
+                document.add(new Paragraph(isiStruk, fontStruk));
+
+                document.close();
+
+                //Otomatis buka file PDF setelah dibuat
+                if (Desktop.isDesktopSupported()) {
+                    File myFile = new File(namaFile);
+                    Desktop.getDesktop().open(myFile);
+                } else {
+                     JOptionPane.showMessageDialog(this, "Struk PDF berhasil disimpan: " + namaFile);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal mencetak PDF: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         private void btnLihatDetailActionPerformed() {
