@@ -35,12 +35,15 @@ dependencies {
 
     // Dependency untuk memproses BCrypt
     implementation 'org.mindrot:jbcrypt:0.4'
+
+    // Dependency untuk PDF (iText)
+    implementation 'com.itextpdf:itextpdf:5.5.13.4'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
