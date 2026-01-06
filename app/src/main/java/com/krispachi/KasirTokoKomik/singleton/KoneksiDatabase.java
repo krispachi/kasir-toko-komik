@@ -16,7 +16,7 @@ public class KoneksiDatabase {
     private static final String URL  = "jdbc:mariadb://localhost:3306/";
     private static final String DBNAME = "kasir_toko_komik";
     private static final String USER = "root";
-    private static final String PASS = "";
+    private static final String PASS = "root";
 
     // Private constructor agar tidak bisa di-instantiate
     private KoneksiDatabase() {}
