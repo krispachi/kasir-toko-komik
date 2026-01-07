@@ -38,6 +38,9 @@ dependencies {
 
     // Dependency untuk PDF (iText)
     implementation 'com.itextpdf:itextpdf:5.5.13.4'
+
+    // ganti versi sesuai kebutuhan, saat ini 7.2.5 adalah versi stabil umum
+    implementation 'com.itextpdf:itext7-core:7.2.5'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

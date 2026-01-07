@@ -20,6 +20,10 @@ public class MenuUtama extends javax.swing.JFrame {
      */
     public MenuUtama() {
         initComponents();
+        
+        if(!Session.getInstance().getRole().equalsIgnoreCase("admin")) {
+            btnPengguna.setVisible(false);
+        }
     }
 
     /**
